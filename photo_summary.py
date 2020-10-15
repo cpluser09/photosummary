@@ -16,6 +16,7 @@ SUMMARY_FILE_NAME = "_summary.jpg"
 
 is_read_photo_count         = 0
 OPT_PHOTO_COUNT_EACH_ROW    = 3
+OPT_PRINT_FILE_NAME         = 0
 
 ORIENT_ROTATES = {"Horizontal (normal)":1, "Mirrored horizontal":2, "Rotated 180":3, "Mirrored vertical":4,
                   "Mirrored horizontal then rotated 90 CCW":5, "Rotated 90 CW":6, "Mirrored horizontal then rotated 90 CW":7, "Rotated 90 CCW":8}
@@ -85,6 +86,7 @@ def draw_frame(ctx, x, y, width, height, color, line_width):
 
 def draw_thumbnail(input_file, bg_img, left, top, width, height):
     rect_left, rect_top = left, top
+    file_name = os.path.basename(input_file)
     imgexif = open(input_file, 'rb')
     exif = exifread.process_file(imgexif)
     
@@ -112,6 +114,8 @@ def draw_thumbnail(input_file, bg_img, left, top, width, height):
 
     ctx = ImageDraw.Draw(bg_img)
     draw_frame(ctx, rect_left, rect_top, width, height, "black", 3)
+    if OPT_PRINT_FILE_NAME == 1:
+        ctx.text((rect_left, rect_top - 12), file_name, font=ImageFont.truetype("FZWBJW.TTF", 10), fill=(0,0,0))
 
 def process():
     # search 
@@ -131,6 +135,8 @@ def process():
     row_count               = (int)(len(files) / photo_count_each_row)
     if len(files) % photo_count_each_row > 0:
         row_count += 1
+    if OPT_PRINT_FILE_NAME == 1:
+        gap_y += 12
 
     bg_width    = thumbnail_width * photo_count_each_row + gap_x * (photo_count_each_row-1) + margin_x * 2
     bg_height   = thumbnail_height * row_count + gap_y * (row_count-1) + margin_y * 2
@@ -183,6 +189,8 @@ if __name__ == '__main__':
             sys.exit()
         elif arg == '-i' or arg == '--ignore':
             PREPROCESS_FLAG = ""
+        elif arg == '-p' or arg == '--print':
+            OPT_PRINT_FILE_NAME = 1
         elif arg == '-r' or arg == '--row':
             is_read_photo_count = 1
         elif is_read_photo_count == 1:
