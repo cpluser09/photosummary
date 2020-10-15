@@ -14,6 +14,9 @@ PREPROCESS_FLAG = "_2000."
 MY_SPECIAL_TAG  = "_lcy"
 SUMMARY_FILE_NAME = "_summary.jpg"
 
+is_read_photo_count         = 0
+OPT_PHOTO_COUNT_EACH_ROW    = 3
+
 ORIENT_ROTATES = {"Horizontal (normal)":1, "Mirrored horizontal":2, "Rotated 180":3, "Mirrored vertical":4,
                   "Mirrored horizontal then rotated 90 CCW":5, "Rotated 90 CW":6, "Mirrored horizontal then rotated 90 CW":7, "Rotated 90 CCW":8}
 
@@ -68,10 +71,7 @@ usage: add_frame [path_of_picture][-h][-v]
 arguments:
     path_of_picture	    path of JPG file
     -i                  ignore PREPROCESS_FLAG("_2000.") flag from source picture
-    -c                  clear/delete all pictures on output folder before resize
-    -a                  disable parse shot address from GPS info
-    -m                  specify frame mode
-    -d                  enable debug mode
+    -r                  photo count for each row
     -h, --help			show this help message and exit
     -v, --version		show version information and exit
 """)
@@ -123,7 +123,7 @@ def process():
     
     thumbnail_width         = 230
     thumbnail_height        = 230
-    photo_count_each_row    = 3
+    photo_count_each_row    = OPT_PHOTO_COUNT_EACH_ROW
     gap_x                   = 20
     gap_y                   = 20
     margin_x                = 80
@@ -183,6 +183,11 @@ if __name__ == '__main__':
             sys.exit()
         elif arg == '-i' or arg == '--ignore':
             PREPROCESS_FLAG = ""
+        elif arg == '-r' or arg == '--row':
+            is_read_photo_count = 1
+        elif is_read_photo_count == 1:
+            is_read_photo_count = 0
+            OPT_PHOTO_COUNT_EACH_ROW = int(arg)
 
     PICTURE_FOLDER = sys.argv[1]
     process()
