@@ -19,6 +19,10 @@ is_read_row                 = 0
 OPT_MAX_ROW_IN_SUMMRARY     = 20
 is_read_column              = 0
 OPT_MAX_COLUMN_IN_SUMMRARY  = 5
+is_read_thumbnail_width     = 0
+OPT_MAX_THUMB_WIDTH         = 230
+is_read_thumbnail_height    = 0
+OPT_MAX_THUMB_HEIGHT        = 230
 
 ORIENT_ROTATES = {"Horizontal (normal)":1, "Mirrored horizontal":2, "Rotated 180":3, "Mirrored vertical":4,
                   "Mirrored horizontal then rotated 90 CCW":5, "Rotated 90 CW":6, "Mirrored horizontal then rotated 90 CW":7, "Rotated 90 CCW":8}
@@ -76,6 +80,8 @@ arguments:
     -i                  ignore PREPROCESS_FLAG("_2000.") flag from source picture
     -c                  column count in summary file
     -r                  row count in summary file
+    -w                  thumbnail width
+    --height            thumbnail height
     -h, --help			show this help message and exit
     -v, --version		show version information and exit
 """)
@@ -136,8 +142,8 @@ def process():
         print("no file found. %s" % PICTURE_FOLDER)
         sys.exit()
     
-    thumbnail_width         = 230
-    thumbnail_height        = 230
+    thumbnail_width         = OPT_MAX_THUMB_WIDTH
+    thumbnail_height        = OPT_MAX_THUMB_HEIGHT
     photo_count_each_row    = OPT_MAX_COLUMN_IN_SUMMRARY
     gap_x                   = 20
     gap_y                   = 20
@@ -210,12 +216,22 @@ if __name__ == '__main__':
             is_read_column = 1
         elif arg == '-r' or arg == '--row':
             is_read_row = 1
+        elif arg == '-w' or arg == '--width':
+            is_read_thumbnail_width = 1
+        elif arg == '--height':
+            is_read_thumbnail_height = 1
         elif is_read_column == 1:
             is_read_column = 0
             OPT_MAX_COLUMN_IN_SUMMRARY = int(arg)
         elif is_read_row == 1:
             is_read_row = 0
             OPT_MAX_ROW_IN_SUMMRARY = int(arg)
+        elif is_read_thumbnail_width == 1:
+            is_read_thumbnail_width = 0
+            OPT_MAX_THUMB_WIDTH = int(arg)
+        elif is_read_thumbnail_height == 1:
+            is_read_thumbnail_height = 0
+            OPT_MAX_THUMB_HEIGHT = int(arg)
 
     PICTURE_FOLDER = sys.argv[1]
     process()
