@@ -14,7 +14,7 @@ PREPROCESS_FLAG = "_2000."
 MY_SPECIAL_TAG  = "_lcy"
 SUMMARY_FILE_NAME = "summary.jpg"
 
-OPT_PRINT_FILE_NAME         = 0
+OPT_PRINT_FILE_NAME         = 1
 is_read_row                 = 0
 OPT_MAX_ROW_IN_SUMMRARY     = 20
 is_read_column              = 0
@@ -24,10 +24,10 @@ OPT_MAX_THUMB_WIDTH         = 210
 is_read_thumbnail_height    = 0
 OPT_MAX_THUMB_HEIGHT        = 210
 
-# OPT_MAX_COLUMN_IN_SUMMRARY  = 2
-# OPT_MAX_ROW_IN_SUMMRARY     = 40
-# OPT_MAX_THUMB_WIDTH         = 580
-# OPT_MAX_THUMB_HEIGHT        = 580
+OPT_MAX_COLUMN_IN_SUMMRARY  = 2
+OPT_MAX_ROW_IN_SUMMRARY     = 40
+OPT_MAX_THUMB_WIDTH         = 580
+OPT_MAX_THUMB_HEIGHT        = 580
 
 ORIENT_ROTATES = {"Horizontal (normal)":1, "Mirrored horizontal":2, "Rotated 180":3, "Mirrored vertical":4,
                   "Mirrored horizontal then rotated 90 CCW":5, "Rotated 90 CW":6, "Mirrored horizontal then rotated 90 CW":7, "Rotated 90 CCW":8}
@@ -217,7 +217,7 @@ if __name__ == '__main__':
         elif arg == '-i' or arg == '--ignore':
             PREPROCESS_FLAG = ""
         elif arg == '-p' or arg == '--print':
-            OPT_PRINT_FILE_NAME = 1
+            OPT_PRINT_FILE_NAME = 0
         elif arg == '-c' or arg == '--column':
             is_read_column = 1
         elif arg == '-r' or arg == '--row':
