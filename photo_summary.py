@@ -18,7 +18,7 @@ OPT_PRINT_FILE_NAME         = 1
 is_read_row                 = 0
 OPT_MAX_ROW_IN_SUMMRARY     = 20
 is_read_column              = 0
-OPT_MAX_COLUMN_IN_SUMMRARY  = 3
+OPT_MAX_COLUMN_IN_SUMMRARY  = 2
 is_read_thumbnail_width     = 0
 OPT_MAX_THUMB_WIDTH         = 210
 is_read_thumbnail_height    = 0
@@ -135,7 +135,7 @@ def write_summary_file(bg_img, summary_file_count):
     if bg_img == None:
         return
     bg_img = bg_img.convert("RGB")
-    output_full_path = ("%s/__%d_%s" % (PICTURE_FOLDER, summary_file_count, SUMMARY_FILE_NAME))
+    output_full_path = ("%s/%02d_%s" % (PICTURE_FOLDER, summary_file_count, SUMMARY_FILE_NAME))
     bg_img.save(output_full_path, quality=100)
     print(output_full_path)
 
