@@ -166,7 +166,7 @@ def draw_thumbnail(input_file, bg_img, left, top, width, height):
     else:
         resize_height   = height
         resize_width    = (int)(resize_height * origin_width / origin_height)
-        left += (int)((width - resize_width) / 2)
+        left = left
         top = top
 
     img_resize = origin_file.resize((resize_width, resize_height), Image.ANTIALIAS)
@@ -176,16 +176,25 @@ def draw_thumbnail(input_file, bg_img, left, top, width, height):
     #draw_frame(ctx, rect_left, rect_top, width, height, "black", 3)
     date_time, shot_time, desc = get_basic_info(exif)
     ctx.text((left, top + resize_height + 4), date_time + " " + desc, font=ImageFont.truetype("FZWBJW.TTF", 22), fill=(60, 60, 60))
+    return left + resize_width
 
-def write_summary_file(bg_img, summary_file_count):
+def write_summary_file(bg_img, summary_file_count, real_width):
     if bg_img == None:
         return
     bg_img = bg_img.rotate(270.0, resample=Image.NEAREST, expand=1)
+    curr_width, curr_height = bg_img.size
+    if curr_height != real_width:
+        rect = (0, 0, curr_width, real_width)
+        bg_img = bg_img.crop(rect)
     bg_img = bg_img.convert("RGB")
     output_full_path = ("%s/__%d_%s" % (PICTURE_FOLDER, summary_file_count, SUMMARY_FILE_NAME))
     bg_img.save(output_full_path, quality=100)
     print(output_full_path)
 
+def peek_picture_props(files):
+    for each_picture in files:
+        imgexif = open(each_picture, 'rb')
+        exif = exifread.process_file(imgexif)
 
 def process():
     # search 
@@ -198,40 +207,45 @@ def process():
     thumbnail_width         = 560 * 2
     thumbnail_height        = 420 * 2
     photo_count_each_row    = total_file_count
-    gap_x                   = 20 * 3
+    gap_x                   = 20 * 4
     gap_y                   = 20
-    margin_x                = 20
+    margin_x                = 80
     margin_y                = 20
     row_count               = 1
+
+    peek_picture_props(files)
 
     bg_width    = thumbnail_width * photo_count_each_row + gap_x * (photo_count_each_row-1) + margin_x * 2
     bg_height   = thumbnail_height * row_count + gap_y * (row_count-1) + margin_y * 2 + 20
     #print("%d,%d   %d,%d" % (bg_width, bg_height, row_count, photo_count_each_row))
 
     idx     = 1
-    left    = 0
-    top     = 0
+    left    = margin_x
+    top     = margin_y
     row     = 0
     column  = 0
     bg_img  = None
+    real_width = 0
+    real_height = bg_height * row_count
     summary_file_count = 0
     for each_picture in files:
         if bg_img == None:
             bg_img = Image.new('RGBA', (bg_width, bg_height), (255, 255, 255))
 
-        left    = margin_x + gap_x * column + thumbnail_width * column
         top     = margin_y + gap_y * row + thumbnail_height * row 
         print("\nNo.%04d: left %04d, row %d,  %s" % (idx, total_file_count-idx, row, each_picture))
-        draw_thumbnail(each_picture, bg_img, left, top, thumbnail_width, thumbnail_height)
+        real_width = draw_thumbnail(each_picture, bg_img, left, top, thumbnail_width, thumbnail_height)
+        left = real_width + gap_x
 
         idx     += 1
         column  += 1
         if column % photo_count_each_row == 0:
-            left    = 0
+            # left    = 0
+            left    = margin_x
             column  = 0
             row     += 1
         if row >= OPT_MAX_ROW_IN_SUMMRARY:
-            write_summary_file(bg_img, summary_file_count)
+            write_summary_file(bg_img, summary_file_count, real_width+margin_x)
             # again
             row = 0
             bg_img = None
@@ -239,7 +253,7 @@ def process():
    
     # write file
     if bg_img != None:
-        write_summary_file(bg_img, summary_file_count)
+        write_summary_file(bg_img, summary_file_count, real_width+margin_x)
     print ("\nDONE.")
 
 
