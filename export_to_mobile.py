@@ -204,8 +204,9 @@ def process():
         print("no file found. %s" % PICTURE_FOLDER)
         sys.exit()
     
-    thumbnail_width         = 560 * 2
-    thumbnail_height        = 420 * 2
+    factor = 300
+    thumbnail_width         = 4 * factor
+    thumbnail_height        = 3 * factor
     photo_count_each_row    = total_file_count
     gap_x                   = 20 * 4
     gap_y                   = 20
