@@ -16,18 +16,19 @@ SUMMARY_FILE_NAME = "summary.jpg"
 
 OPT_PRINT_FILE_NAME         = 1
 is_read_row                 = 0
-OPT_MAX_ROW_IN_SUMMRARY     = 20
+OPT_MAX_ROW_IN_SUMMRARY     = 40
 is_read_column              = 0
 OPT_MAX_COLUMN_IN_SUMMRARY  = 2
 is_read_thumbnail_width     = 0
-OPT_MAX_THUMB_WIDTH         = 210
+OPT_MAX_THUMB_WIDTH         = 620
 is_read_thumbnail_height    = 0
-OPT_MAX_THUMB_HEIGHT        = 210
+OPT_MAX_THUMB_HEIGHT        = 620
 
-# OPT_MAX_COLUMN_IN_SUMMRARY  = 2
-# OPT_MAX_ROW_IN_SUMMRARY     = 40
-# OPT_MAX_THUMB_WIDTH         = 620
-# OPT_MAX_THUMB_HEIGHT        = 620
+
+# OPT_MAX_COLUMN_IN_SUMMRARY  = 3
+# OPT_MAX_THUMB_WIDTH         = 210
+# OPT_MAX_THUMB_HEIGHT        = 210
+
 
 ORIENT_ROTATES = {"Horizontal (normal)":1, "Mirrored horizontal":2, "Rotated 180":3, "Mirrored vertical":4,
                   "Mirrored horizontal then rotated 90 CCW":5, "Rotated 90 CW":6, "Mirrored horizontal then rotated 90 CW":7, "Rotated 90 CCW":8}
