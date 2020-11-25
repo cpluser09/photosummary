@@ -99,6 +99,46 @@ def draw_frame(ctx, x, y, width, height, color, line_width):
     ctx.line((x+width+offset, y+height, x-offset, y+height), color, line_width)
     ctx.line((x, y+height, x, y), color, line_width+1)
 
+def parse_fraction(fraction):
+    #print(fraction)
+    if len(fraction) <= 0:
+        return 0.0
+    idx = fraction.find("/")
+    if -1 == idx:
+        return float(fraction)
+    numerator = float(fraction[0:idx])
+    denominator = float(fraction[idx+1:len(fraction)])
+    return (numerator / denominator)
+
+def query_shot_param(exif):
+    desc = ""
+    if "EXIF FNumber" in exif.keys():
+        value = parse_fraction(exif["EXIF FNumber"].printable)
+        desc = desc + ("F %.1f" % value)
+    if "EXIF ExposureTime" in exif.keys():
+        desc = desc + ", Exp " + exif["EXIF ExposureTime"].printable
+    if "EXIF ISOSpeedRatings" in exif.keys():
+        desc = desc + ", ISO " + exif["EXIF ISOSpeedRatings"].printable
+    if "EXIF ExposureBiasValue" in exif.keys():
+        # ev = float(exif["EXIF ExposureBiasValue"].printable) * 100.0 / 33.0
+        # print(ev)
+        desc = desc + (", EV %s" % exif["EXIF ExposureBiasValue"].printable)
+    if "EXIF ExposureMode" in exif.keys():
+        desc = desc + ", ExpM " + exif["EXIF ExposureMode"].printable
+    if "EXIF ExposureProgram" in exif.keys():
+        desc = desc + ", ExpP " + exif["EXIF ExposureProgram"].printable            
+    if "EXIF FocalLengthIn35mmFilm" in exif.keys():
+        desc = desc + ", " + exif["EXIF FocalLengthIn35mmFilm"].printable + "MM"
+    elif "EXIF FocalLength" in exif.keys():
+        desc = desc + ", " + exif["EXIF FocalLength"].printable + "MM"
+    if "EXIF ColorSpace" in exif.keys():
+        desc = desc + ", " + exif["EXIF ColorSpace"].printable
+    if "EXIF DateTimeOriginal" in exif.keys():
+        desc = desc + ", " + exif["EXIF DateTimeOriginal"].printable
+    # if "EXIF DateTimeDigitized" in exif.keys():
+    #     desc = desc + ", " + exif["EXIF DateTimeDigitized"].printable
+    return desc
+
 def draw_thumbnail(input_file, bg_img, left, top, width, height):
     rect_left, rect_top = left, top
     file_name = os.path.basename(input_file)
@@ -130,7 +170,9 @@ def draw_thumbnail(input_file, bg_img, left, top, width, height):
     ctx = ImageDraw.Draw(bg_img)
     draw_frame(ctx, rect_left, rect_top, width, height, "black", 3)
     if OPT_PRINT_FILE_NAME == 1:
-        ctx.text((rect_left, rect_top - 12), file_name, font=ImageFont.truetype("FZWBJW.TTF", 10), fill=(0,0,0))
+        shot_param = query_shot_param(exif)
+        draw_text = file_name + " - " + shot_param
+        ctx.text((rect_left, rect_top - 12), draw_text, font=ImageFont.truetype("FZWBJW.TTF", 10), fill=(0,0,0))
 
 def write_summary_file(bg_img, summary_file_count):
     if bg_img == None:
