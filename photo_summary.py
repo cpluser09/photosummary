@@ -179,12 +179,22 @@ def write_summary_file(bg_img, summary_file_count):
         return
     bg_img = bg_img.convert("RGB")
     output_full_path = ("%s/%02d_%s" % (PICTURE_FOLDER, summary_file_count, SUMMARY_FILE_NAME))
+    print(output_full_path)
     bg_img.save(output_full_path, quality=100)
     print(output_full_path)
 
 
-def process():
-    # search 
+def process(path_to_process, tag_filter=None):
+    print(tag_filter, path_to_process)
+    if path_to_process is not None:
+        global PICTURE_FOLDER
+        PICTURE_FOLDER = path_to_process
+    if tag_filter is None or tag_filter == "":
+        global PREPROCESS_FLAG
+        PREPROCESS_FLAG = ""
+    print(PREPROCESS_FLAG, PICTURE_FOLDER)
+
+    # search
     files = search_files(PICTURE_FOLDER)
     total_file_count = len(files)
     if total_file_count == 0:
@@ -282,8 +292,8 @@ if __name__ == '__main__':
             is_read_thumbnail_height = 0
             OPT_MAX_THUMB_HEIGHT = int(arg)
 
-    PICTURE_FOLDER = sys.argv[1]
-    process()
+    #PICTURE_FOLDER = sys.argv[1]
+    process(sys.argv[1], PREPROCESS_FLAG)
 
 
 
