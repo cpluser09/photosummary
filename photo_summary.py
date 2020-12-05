@@ -185,14 +185,12 @@ def write_summary_file(bg_img, summary_file_count):
 
 
 def process(path_to_process, tag_filter=None):
-    print(tag_filter, path_to_process)
     if path_to_process is not None:
         global PICTURE_FOLDER
         PICTURE_FOLDER = path_to_process
     if tag_filter is None or tag_filter == "":
         global PREPROCESS_FLAG
         PREPROCESS_FLAG = ""
-    print(PREPROCESS_FLAG, PICTURE_FOLDER)
 
     # search
     files = search_files(PICTURE_FOLDER)
