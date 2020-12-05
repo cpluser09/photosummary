@@ -179,7 +179,6 @@ def write_summary_file(bg_img, summary_file_count):
         return
     bg_img = bg_img.convert("RGB")
     output_full_path = ("%s/%02d_%s" % (PICTURE_FOLDER, summary_file_count, SUMMARY_FILE_NAME))
-    print(output_full_path)
     bg_img.save(output_full_path, quality=100)
     print(output_full_path)
 
